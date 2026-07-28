@@ -1,0 +1,53 @@
+# ============================================================
+# CONFIDENCIAL - nunca versionar
+# O arquivo de-para liga nomes ficticios aos reais. Se ele entrar
+# no historico do Git, o projeto inteiro passa a ser reidentificavel,
+# e remover depois exige reescrever o historico.
+# ============================================================
+*de-para*
+*depara*
+_privado/
+originais/
+*.real.*
+*.orig.*
+
+# ============================================================
+# Fontes originais da empresa - nunca versionar
+# ============================================================
+*.bak
+*.bacpac
+credenciais*
+conexao*
+*.udl
+
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# ============================================================
+# Power BI e Office - temporarios
+# ============================================================
+*.pbix.tmp
+~$*
+*.xlk
+
+# ============================================================
+# Sistema e editores
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# ============================================================
+# NAO ignorar a pasta data/
+# Os CSVs gerados sao sinteticos e devem ser versionados, para que
+# qualquer pessoa abra o .pbix sem precisar rodar o gerador.
+# ============================================================

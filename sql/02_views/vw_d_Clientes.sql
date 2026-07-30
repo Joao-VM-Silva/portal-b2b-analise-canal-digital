@@ -30,7 +30,7 @@ SELECT
 	CASE
 		WHEN cl.BLOQUEADO = 1 THEN 'Bloqueado'
 		WHEN cl.BLOQUEADO = 0 THEN 'Ativo'
-		ELSE 'Não Informado'
+		ELSE 'Não informado'
 	END AS [Status Cliente],
 
 	CAST(cl.DAT_CADASTRO AS DATE) AS [Data Cadastro]

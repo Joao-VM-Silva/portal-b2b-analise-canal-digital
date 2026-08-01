@@ -23,7 +23,7 @@ SELECT
 	ISNULL(cp.DES_GRPCLI, 'Sem grupo') AS [Grupo Cliente],
 	ISNULL(ci.DES_CIDADE, 'Não informado') AS Cidade,
 	cl.COD_ESTADO AS UF,
-	cl.BLOQUEADO AS [Flag Bloqueado],
+	cl.BLOQUEADO AS [Flag Cliente Bloqueado],
 
 	-- o ELSE cobre o cadastro sem status preenchido, que existe
 	-- na origem e não pode virar branco no modelo

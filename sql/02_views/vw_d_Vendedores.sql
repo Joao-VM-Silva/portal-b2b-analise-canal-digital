@@ -14,7 +14,7 @@ CREATE OR ALTER VIEW vw_d_Vendedores AS
 SELECT
 	cv.COD_VENDEDOR AS [Codigo Vendedor],
 	cv.NOM_GUERRA AS [Nome Vendedor],
-	cv.BLOQUEADO AS [Flag Bloqueado],
+	cv.BLOQUEADO AS [Flag Vendedor Bloqueado],
 
 	CASE
 		WHEN cv.BLOQUEADO = 1 THEN 'Bloqueado'

@@ -244,6 +244,154 @@ mudança e print de um estado de tela que não existe mais.
 
 ---
 
+## 31/07 — Flags de bloqueio expostas nas dimensões
+
+As duas views já retornavam uma flag numérica para identificar registros bloqueados.
+No entanto, em ambas, a coluna possuía o mesmo nome: Flag Bloqueado.
+**Decisão:** renomear as colunas para deixar explícita a entidade representada por cada flag:
+
+Flag Cliente Bloqueado na d_Clientes;
+Flag Vendedor Bloqueado na d_Vendedores.
+
+A alteração não modificou a regra nem o conteúdo das colunas. O objetivo foi apenas melhorar a
+clareza, evitar ambiguidades durante a modelagem e facilitar a identificação dos campos na
+criação de medidas e análises.
+
+---
+
+## 01/08 — Tratamento da chave de cruzamento no Power Query
+
+O identificador chega com máscara nas planilhas do portal e sem máscara no
+banco. Sem padronização, o cruzamento entre as duas fontes simplesmente não
+acontece — e falha em silêncio, sem erro, apenas devolvendo menos
+correspondências do que deveria.
+
+**Alternativas:** tratar no banco, criando uma coluna normalizada; tratar na
+camada de transformação.
+
+**Decisão:** normalizar no Power Query, em etapa única — extrair apenas os
+dígitos e completar com zeros à esquerda até 14 posições. A coluna tratada
+substitui a original.
+
+O tratamento ficou na camada de transformação porque o problema pertence ao
+arquivo externo: as tabelas internas já armazenam o campo padronizado como
+texto. Corrigir no banco seria resolver no lugar errado.
+
+---
+
+## 01/08 — Estabelecimento responsável derivado da UF
+
+A tabela de vínculo comercial tem grão de cliente e estabelecimento, não de
+cliente. Cruzar apenas pelo código do cliente duplicaria linhas no funil para
+quem é atendido pelas duas unidades.
+
+**Decisão:** compor a chave de mesclagem com cliente e estabelecimento,
+derivando o estabelecimento a partir da UF informada pela plataforma.
+
+A regra assumida é que o cliente é atendido pela unidade do próprio estado.
+Ela resolve a duplicidade sem descartar vínculo, mas é uma premissa: se a UF
+do portal divergir do cadastro interno para algum cliente, a mesclagem não
+encontra par e o vendedor volta nulo.
+
+---
+
+## 01/08 — Consultas de apoio sem carga no modelo
+
+`d_ClienteVendedorEstabelecimento` e `d_UltimaCompraCliente` entram no projeto
+apenas como origem de mesclagem.
+
+**Decisão:** manter as duas com carga desabilitada.
+
+A primeira não tem grão de cliente e, carregada como dimensão, permitiria
+contagens duplicadas sem aviso. A segunda tem seus atributos já incorporados à
+tabela de oportunidades, e carregá-la criaria um segundo caminho para a mesma
+informação.
+
+---
+
+## 01/08 — Tabela de oportunidades mantida denormalizada
+
+`f_OportunidadesPortal` incorpora, por mesclagem, atributos que também existem
+nas dimensões: razão social, grupo comercial, cidade, UF, status do cliente e
+dados do vendedor responsável.
+
+**Alternativas:** manter a tabela enxuta, apenas com chaves e colunas próprias,
+buscando o restante pelas dimensões; ou incorporar os atributos.
+
+**Decisão:** incorporar.
+
+A tabela não serve apenas à contagem do funil — ela é também a base do plano de
+ação, que precisa ser lido, exportado e distribuído linha a linha, com o
+contexto completo de cada cliente. Uma tabela enxuta cumpriria o primeiro papel
+e não o segundo.
+
+Consequência assumida: o mesmo atributo existe em dois lugares, com
+comportamento de filtro diferente. Ao montar cada visual, é preciso decidir
+conscientemente de qual origem parte a segmentação.
+
+---
+
+## 01/08 — Clientes sem cadastro interno na segmentação
+
+Os clientes que usam a plataforma e não existem no cadastro interno — o público
+de prospecção — não possuem código de cliente. Ao segmentar por qualquer
+atributo vindo da dimensão de clientes, eles desaparecem do resultado.
+
+**Alternativas:** criar um membro desconhecido na dimensão, com chave sentinela,
+para que nenhum registro saia da segmentação; ou aceitar o comportamento.
+
+**Decisão:** aceitar.
+
+O comportamento é coerente: quem não tem cadastro interno não tem grupo
+comercial nem carteira atribuída, e não deveria aparecer numa quebra por esses
+atributos. Para as análises em que esse público precisa aparecer, a segmentação
+parte das colunas do próprio portal, que a tabela de oportunidades carrega.
+
+---
+
+## 01/08 — Dimensão de calendário
+
+**Decisão:** gerar o calendário a partir da tabela fato de vendas, expandido
+para anos completos, e controlar a exibição por uma coluna de vigência.
+
+A expansão para anos completos é necessária para que inteligência temporal
+funcione — cálculos acumulados no ano exigem janeiro a dezembro presentes. Como
+a janela do fato é de 24 meses e não coincide com o ano civil, isso deixa meses
+vazios nas duas pontas.
+
+A coluna de vigência delimita o intervalo em que existe movimento, comparando
+cada data com a menor e a maior data da tabela fato. Aplicada como filtro, ela
+remove os períodos vazios dos visuais sem quebrar os cálculos acumulados.
+
+O calendário não foi relacionado às datas de última compra: elas alcançam até
+48 meses atrás, fora do intervalo do calendário, e não são eixo de análise
+temporal — funcionam como atributo de classificação do cliente.
+
+---
+
+## 01/08 — Dimensão de estabelecimento
+
+Matriz e filial eram identificadas por código em cada tabela fato, com a
+descrição resolvida separadamente em cada uma.
+
+**Decisão:** criar uma dimensão própria de estabelecimento.
+
+Um único segmentador passa a filtrar as duas tabelas fato ao mesmo tempo — as
+vendas e o funil de oportunidades. Sem a dimensão, seriam necessários dois
+segmentadores independentes, com risco de ficarem dessincronizados na tela.
+
+---
+
+## 01/08 — Tabelas de apoio ao modelo
+
+**Decisão:** criar uma tabela dedicada às medidas e uma tabela de data de
+atualização.
+
+A tabela de medidas mantém os cálculos agrupados em um só lugar do painel de
+campos, em vez de espalhados pelas tabelas de origem. A data de atualização
+registra o momento da última carga e fica visível no rodapé do relatório, para
+que ninguém interprete um dado antigo como atual.
+
 <!--
 Modelo para as próximas entradas:
 

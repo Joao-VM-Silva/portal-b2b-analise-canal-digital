@@ -392,6 +392,44 @@ campos, em vez de espalhados pelas tabelas de origem. A data de atualização
 registra o momento da última carga e fica visível no rodapé do relatório, para
 que ninguém interprete um dado antigo como atual.
 
+
+## 02/08 — Medidas de comparação entre períodos
+
+O projeto original expunha apenas valores absolutos do período corrente,
+porque a janela era de 12 meses e não havia base de comparação.
+
+**Decisão:** com a janela ampliada para 24 meses, incluir medidas de
+variação anual e acumulado no ano.
+
+A comparação com o mesmo período do ano anterior é o que transforma a
+participação do canal de um número isolado em uma trajetória. Sem ela,
+não é possível dizer se o canal está ganhando ou perdendo espaço.
+
+## 02/08 — Base de cálculo das medidas do funil
+
+As contagens do funil partem de bases diferentes conforme a pergunta:
+o total de usuários da plataforma, quando o interesse é o alcance; e a
+base elegível — com cadastro interno e sem bloqueio — quando o interesse
+é a conversão.
+
+**Decisão:** padronizar cada percentual sobre a base que corresponde à
+pergunta que ele responde, e deixar o denominador explícito no nome da
+medida.
+
+Misturar as duas bases num mesmo percentual produz número correto para
+uma pergunta que ninguém fez.
+
+## 02/08 — Vendas restritas à base do portal
+
+As duas tabelas fato não estão relacionadas entre si. Para medir o
+faturamento apenas dos clientes que usam a plataforma, o vínculo é feito
+em tempo de cálculo, tratando o par cliente e estabelecimento da tabela
+de oportunidades como filtro sobre a tabela de vendas.
+
+**Decisão:** usar o par, e não apenas o cliente. Um cliente que aparece
+na exportação de uma unidade não deve trazer para o cálculo as vendas
+feitas pela outra.
+
 <!--
 Modelo para as próximas entradas:
 

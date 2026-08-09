@@ -97,3 +97,4 @@ PROP_VENDEDOR_BLOQUEADO = 0.12
 PROP_VENDEDOR_SEM_SUPERVISOR = 0.15
 
 DIR_SAIDA = str(Path(__file__).resolve().parent.parent / "data")
+DIR_PORTAL = str(Path(__file__).resolve().parent.parent / "data-portal")

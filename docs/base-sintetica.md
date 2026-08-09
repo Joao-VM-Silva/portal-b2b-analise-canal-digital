@@ -76,17 +76,17 @@ qualitativa, sem valores.
 O gerador produz sete tabelas no formato bruto de um ERP, mais duas planilhas
 que simulam a exportação da plataforma externa.
 
-| Arquivo | Conteúdo |
-|---|---|
-| `CADCLI.csv` | Cadastro de clientes |
-| `CADCID.csv` | Cidades, com chave composta por código e estado |
-| `CADGRP.csv` | Grupos comerciais |
-| `CADVEN.csv` | Vendedores |
-| `CADSUP.csv` | Supervisores |
-| `VINEST.csv` | Vínculo entre cliente, estabelecimento e vendedor |
-| `MOVNFS.csv` | Movimento de notas fiscais, 48 meses |
-| `portal_matriz.xlsx` | Exportação da plataforma, região da matriz |
-| `portal_filial.xlsx` | Exportação da plataforma, região da filial |
+| Arquivo | Pasta | Conteúdo |
+|---|---|---|
+| `CADCLI.csv` | `data/` | Cadastro de clientes |
+| `CADCID.csv` | `data/` | Cidades, com chave composta por código e estado |
+| `CADGRP.csv` | `data/` | Grupos comerciais |
+| `CADVEN.csv` | `data/` | Vendedores |
+| `CADSUP.csv` | `data/` | Supervisores |
+| `VINEST.csv` | `data/` | Vínculo entre cliente, estabelecimento e vendedor |
+| `MOVNFS.csv` | `data/` | Movimento de notas fiscais, 48 meses |
+| `portal_matriz.xlsx` | `data-portal/` | Exportação da plataforma, região da matriz |
+| `portal_filial.xlsx` | `data-portal/` | Exportação da plataforma, região da filial |
 
 As tabelas seguem a convenção de um sistema legado: nomes abreviados, códigos
 sem descrição, datas com hora, valores em ponto flutuante e ausência de chaves
@@ -97,6 +97,10 @@ As duas planilhas não entram no banco. São lidas direto pela camada de
 transformação, reproduzindo a integração multi-fonte do caso original. O CNPJ
 vem com máscara nelas e sem máscara no banco, o que exige tratamento da chave
 antes do cruzamento.
+
+Elas ficam em diretório separado porque a camada de transformação lê a pasta
+inteira: um CSV da base ali dentro seria interpretado como planilha e quebraria
+a consulta.
 
 ---
 
@@ -129,17 +133,22 @@ está em [`resultados-conferencia.md`](resultados-conferencia.md).
 ```bash
 cd data-generator
 python -m venv .venv
-source .venv/Scripts/activate      # Windows: Git Bash
+.venv\Scripts\Activate.ps1         # Windows PowerShell
+# .venv/Scripts/activate           # Git Bash
+# source .venv/bin/activate        # Linux e macOS
 pip install -r requirements.txt
 python gerar_base.py
 ```
 
-Os arquivos são escritos em `data/`. Em seguida, `sql/01_ddl_e_carga.sql` cria
-as tabelas e faz a carga; ajuste os caminhos antes de executar.
+Os CSVs são escritos em `data/` e as duas planilhas do portal em
+`data-portal/`, ambas criadas pelo próprio script quando não existem. Em
+seguida, `sql/01_ddl_e_carga.sql` cria as tabelas e faz a carga; ajuste os
+caminhos antes de executar.
 
-O gerador usa semente fixa (`SEED = 42`). Rodar duas vezes produz exatamente a
-mesma base, o que torna os números da conferência verificáveis por qualquer
-pessoa.
+Dois parâmetros garantem que o resultado seja sempre o mesmo: a semente
+aleatória (`SEED`) e a data de referência (`DATA_REFERENCIA`), que ancora todo
+o histórico. Com a data do sistema no lugar dela, o resultado mudaria a cada
+execução em dia diferente, e os números da conferência deixariam de bater.
 
 Os parâmetros de porte, funil, faturamento e proporção de registros incompletos
 ficam em `parametros.py` e podem ser alterados. Mudar qualquer um deles

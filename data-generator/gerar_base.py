@@ -475,10 +475,13 @@ def main():
     escrever(clientes, "CADCLI.csv")
     escrever(vinculos, "VINEST.csv")
     escrever(notas, "MOVNFS.csv")
+    # As planilhas do portal vao para pasta separada dos CSVs, porque o
+    # Power Query le o diretorio inteiro: um CSV ali dentro quebraria a consulta.
+    os.makedirs(p.DIR_PORTAL, exist_ok=True)
     for df, nome in [(exp_m, "portal_matriz.xlsx"), (exp_f, "portal_filial.xlsx")]:
-        df.to_excel(os.path.join(p.DIR_SAIDA, nome), index=False,
+        df.to_excel(os.path.join(p.DIR_PORTAL, nome), index=False,
                     sheet_name="Relatorio")
-        print(f"  {nome:24} {len(df):>8,} linhas")
+        print(f"  {nome:24} {len(df):>8,} linhas  -> data-portal/")
 
     # ---------------------------------------------------------- conferencia
     hoje = p.DATA_REFERENCIA.replace(day=1)

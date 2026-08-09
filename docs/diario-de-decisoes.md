@@ -455,6 +455,21 @@ código do vendedor como chave.
 A correção usa um gerador aleatório isolado, para alterar apenas essa
 coluna sem deslocar as demais tabelas da base.
 
+
+## 08/08 — Planilhas do portal em diretório próprio
+
+O Power Query lê as exportações da plataforma com Folder.Files, que carrega
+todos os arquivos do diretório. Misturadas aos CSVs da base, a consulta
+tentaria abrir cada um deles como planilha.
+
+**Decisão:** o gerador grava as duas planilhas em pasta separada, criada
+por ele quando não existe.
+
+Antes a separação era feita manualmente, o que quebrava a reprodutibilidade:
+quem clonasse o repositório e rodasse o script teria a consulta apontando
+para uma pasta vazia.
+
+
 <!--
 Modelo para as próximas entradas:
 

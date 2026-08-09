@@ -24,6 +24,7 @@ Uso:
 
 import os
 import random
+from collections import Counter
 from datetime import date, datetime, timedelta
 
 import numpy as np
@@ -120,6 +121,38 @@ def gerar_supervisores() -> pd.DataFrame:
     return pd.DataFrame(linhas)
 
 
+def _tornar_nomes_unicos(df: pd.DataFrame, coluna: str) -> pd.DataFrame:
+    """
+    Garante que o nome de guerra seja unico entre os vendedores.
+
+    Nomes que se repetem recebem um sobrenome para diferenciacao, que e o
+    que acontece numa equipe comercial real. Sem isso, dois vendedores
+    homonimos se fundem em um so ponto nos graficos.
+
+    Usa um gerador proprio, isolado dos demais, para que a correcao altere
+    apenas esta coluna e nenhuma outra tabela da base.
+    """
+    aux = random.Random(p.SEED + 1)
+    nomes = df[coluna].tolist()
+    repetidos = {n for n, q in Counter(nomes).items() if q > 1}
+
+    usados, saida = set(), []
+    for nome in nomes:
+        if nome not in repetidos:
+            saida.append(nome)
+            usados.add(nome)
+            continue
+        for sobrenome in aux.sample(SOBRENOMES, len(SOBRENOMES)):
+            candidato = f"{nome} {sobrenome.upper()}"
+            if candidato not in usados:
+                break
+        saida.append(candidato)
+        usados.add(candidato)
+
+    df[coluna] = saida
+    return df
+
+
 def gerar_vendedores(supervisores: pd.DataFrame) -> pd.DataFrame:
     """
     BLOQUEADO vem como codigo 0/1, sem descricao: a traducao e trabalho
@@ -141,7 +174,7 @@ def gerar_vendedores(supervisores: pd.DataFrame) -> pd.DataFrame:
                 "_regiao": cod_reg,
             })
             cod += 1
-    return pd.DataFrame(linhas)
+    return _tornar_nomes_unicos(pd.DataFrame(linhas), "NOM_GUERRA")
 
 
 # --------------------------------------------------------------- CADCLI
@@ -156,7 +189,7 @@ def gerar_clientes(cidades: pd.DataFrame) -> pd.DataFrame:
     p_reg /= p_reg.sum()
 
     grupos = [(c, w) for c, _, w in p.GRUPOS_CLIENTE]
-    hoje = date.today()
+    hoje = p.DATA_REFERENCIA
     inicio = hoje - timedelta(days=365 * 12)
 
     cid_por_uf = {r["sigla"]: cidades.loc[cidades["COD_ESTADO"] == r["sigla"],
@@ -294,7 +327,7 @@ def gerar_notas(clientes: pd.DataFrame, vinculos: pd.DataFrame,
     notas canceladas e notas sem data. A view de fato descarta tudo isso;
     a de ultima compra, no script original, nao descartava.
     """
-    hoje = date.today().replace(day=1)
+    hoje = p.DATA_REFERENCIA.replace(day=1)
     inicio = hoje - timedelta(days=30 * p.MESES_HISTORICO)
     dias_hist = (hoje - inicio).days
     dias_fora = dias_hist - 30 * p.MESES_FATO
@@ -448,7 +481,7 @@ def main():
         print(f"  {nome:24} {len(df):>8,} linhas")
 
     # ---------------------------------------------------------- conferencia
-    hoje = date.today().replace(day=1)
+    hoje = p.DATA_REFERENCIA.replace(day=1)
     valida = (notas["DAT_EMISSAO"].notna() & (notas["TIP_SAIDA"] == "V")
               & notas["DAT_CANCELAMENTO"].isna())
     canal = notas["DES_LAYOUTPDE"] == p.LAYOUT_CANAL

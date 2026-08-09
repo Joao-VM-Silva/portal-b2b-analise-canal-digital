@@ -10,6 +10,13 @@ Nenhum valor corresponde a dado real de qualquer empresa.
 
 SEED = 42
 
+# Data de referencia da base. Fixada de proposito: com date.today() o
+# resultado mudaria a cada execucao em dia diferente, e os numeros da
+# conferencia deixariam de bater. Alterar aqui desloca toda a base no tempo.
+from datetime import date
+from pathlib import Path
+DATA_REFERENCIA = date(2026, 7, 1)
+
 # ---------------------------------------------------------------- porte
 N_CLIENTES = 1200
 N_CLIENTES_PLATAFORMA = 380
@@ -89,4 +96,4 @@ PROP_CLIENTE_SEM_VINCULO = 0.04
 PROP_VENDEDOR_BLOQUEADO = 0.12
 PROP_VENDEDOR_SEM_SUPERVISOR = 0.15
 
-DIR_SAIDA = "data"
+DIR_SAIDA = str(Path(__file__).resolve().parent.parent / "data")

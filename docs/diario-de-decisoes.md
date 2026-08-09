@@ -430,6 +430,31 @@ de oportunidades como filtro sobre a tabela de vendas.
 na exportação de uma unidade não deve trazer para o cálculo as vendas
 feitas pela outra.
 
+
+## 07/08 — Data de referência fixada no gerador
+
+O gerador usava a data corrente do sistema como âncora do histórico.
+Rodar o script em dias diferentes produzia bases diferentes, e os números
+da conferência deixavam de corresponder ao que estava documentado.
+
+**Decisão:** transformar a data de referência em parâmetro fixo.
+
+A reprodutibilidade era premissa do projeto — qualquer pessoa deveria
+chegar aos mesmos números rodando o script. Com a data do sistema como
+âncora, isso só valia dentro do mesmo mês.
+
+## 07/08 — Nome de guerra único por vendedor
+
+Os nomes eram sorteados de uma lista menor que o número de vendedores,
+o que produzia homônimos. Nos visuais agrupados por nome, dois vendedores
+diferentes se fundiam em um único ponto.
+
+**Decisão:** acrescentar o sobrenome aos nomes repetidos, mantendo o
+código do vendedor como chave.
+
+A correção usa um gerador aleatório isolado, para alterar apenas essa
+coluna sem deslocar as demais tabelas da base.
+
 <!--
 Modelo para as próximas entradas:
 

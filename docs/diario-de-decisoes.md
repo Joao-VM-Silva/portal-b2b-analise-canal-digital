@@ -469,6 +469,19 @@ Antes a separação era feita manualmente, o que quebrava a reprodutibilidade:
 quem clonasse o repositório e rodasse o script teria a consulta apontando
 para uma pasta vazia.
 
+## 09/08 — Correção do cálculo de vendas restritas à base do portal
+
+A medida que restringe o faturamento aos clientes da plataforma iterava
+linha a linha aplicando o filtro dentro de cada iteração. Como os
+argumentos de filtro são avaliados antes da transição de contexto, cada
+iteração recebia o conjunto inteiro de clientes em vez de um só.
+
+O resultado ficava correto no detalhe e multiplicado no total — o tipo de
+erro que não aparece na conferência linha a linha.
+
+**Decisão:** aplicar o par cliente e estabelecimento como filtro único,
+em uma avaliação, no lugar da iteração.
+
 
 <!--
 Modelo para as próximas entradas:

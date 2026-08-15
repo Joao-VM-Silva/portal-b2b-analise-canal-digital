@@ -130,7 +130,7 @@ está em [`resultados-conferencia.md`](resultados-conferencia.md).
 
 ## Como reproduzir
 
-```bash
+```powershell
 cd data-generator
 python -m venv .venv
 .venv\Scripts\Activate.ps1         # Windows PowerShell

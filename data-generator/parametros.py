@@ -8,13 +8,19 @@ Todo o tratamento acontece nas views SQL, nao aqui.
 Nenhum valor corresponde a dado real de qualquer empresa.
 """
 
+"""
+Parametros de geracao (...)
+"""
+
+from datetime import date
+from pathlib import Path
+
 SEED = 42
 
 # Data de referencia da base. Fixada de proposito: com date.today() o
 # resultado mudaria a cada execucao em dia diferente, e os numeros da
 # conferencia deixariam de bater. Alterar aqui desloca toda a base no tempo.
-from datetime import date
-from pathlib import Path
+
 DATA_REFERENCIA = date(2026, 7, 1)
 
 # ---------------------------------------------------------------- porte

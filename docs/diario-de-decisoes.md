@@ -430,6 +430,13 @@ de oportunidades como filtro sobre a tabela de vendas.
 na exportação de uma unidade não deve trazer para o cálculo as vendas
 feitas pela outra.
 
+## 02/08 — Tratamento de contexto vazio nas medidas
+
+Divisões que representam participação retornam zero quando não há dado,
+porque zero é leitura legítima. Divisões que representam variação entre
+períodos retornam vazio, para que o primeiro período do histórico — que
+não tem comparação — não desenhe uma linha em zero no gráfico.
+
 
 ## 07/08 — Data de referência fixada no gerador
 
@@ -482,16 +489,12 @@ erro que não aparece na conferência linha a linha.
 **Decisão:** aplicar o par cliente e estabelecimento como filtro único,
 em uma avaliação, no lugar da iteração.
 
+## 13/08 — Compressão das imagens de fundo
 
-<!--
-Modelo para as próximas entradas:
+As imagens de plano de fundo levaram o arquivo do Power BI a mais de
+30 MB. Como o Git guarda cópia inteira de binário a cada commit, o
+repositório cresceria rápido e sem possibilidade de enxugar depois.
 
-## DD/MM — Título curto da decisão
-
-**Alternativas:** o que estava em jogo.
-
-**Decisão:** o que foi escolhido.
-
-Por quê, e o que muda em consequência. Se houver número medido, registrar
-aqui com a data.
--->
+**Decisão:** comprimir as imagens antes de aplicá-las ao relatório.
+Imagem de fundo para tela não exige a resolução original, e a diferença
+não é perceptível na apresentação.

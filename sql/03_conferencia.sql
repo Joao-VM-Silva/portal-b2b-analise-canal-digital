@@ -13,6 +13,7 @@
      5. Faturamento e participação do canal, ano a ano
      6. Grão da tabela ponte
      7. Registros incompletos preservados e rotulados
+     8. Limitacao conhecida da base sintetica
    ============================================================ */
 
 USE PortalB2B;
@@ -179,7 +180,7 @@ SELECT
 /* 8 -----------------------------------------------------------
    Limitação conhecida da base sintética: nenhum cliente
    bloqueado possui histórico de compra. Na realidade, o bloqueio
-   costuma vir depois de um período comprando. Documentado no README.
+   costuma vir depois de um período comprando. Documentado em docs/base-sintetica.md
    ------------------------------------------------------------ */
 SELECT '8. Limitacao conhecida' AS bloco;
 

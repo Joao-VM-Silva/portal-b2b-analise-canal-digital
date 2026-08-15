@@ -5,7 +5,7 @@ e na documentação técnica.
 
 | | |
 |---|---|
-| Data da medição | 30/07/2026 |
+| Data da medição | 30/07/2026, reconferida em 14/08/2026 |
 | Script | [`sql/03_conferencia.sql`](../sql/03_conferencia.sql) |
 | Semente do gerador | `SEED = 42` |
 | Reprodutibilidade | rodar `gerar_base.py` com a mesma semente reproduz estes números |
@@ -98,7 +98,7 @@ aparecem em `vw_f_Vendas`. São eles que justificam a existência das duas views
 |---|---:|---:|---:|
 | Notas | 21.950 | 21.950 | 0,0% |
 | Faturamento total | R$ 98.149.383,71 | R$ 106.000.000,16 | +8,0% |
-| Faturamento do canal | R$ 6.379.629,54 | R$ 10.069.999,99 | **+57,8%** |
+| Faturamento do canal | R$ 6.379.629,54 | R$ 10.069.999,99 | **+57,85%** |
 | Participação do canal | 6,50% | 9,50% | +3,0 p.p. |
 | Clientes comprando pelo canal | 73 | 70 | −3 |
 | Receita por cliente do canal | R$ 87.392 | R$ 143.857 | +64,6% |

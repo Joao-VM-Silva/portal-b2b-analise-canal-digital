@@ -1,4 +1,6 @@
-# Portal B2B — Análise de Adoção de Canal Digital
+# Portal B2B — Business Intelligence e Análise Comercial
+
+### Análise de adoção e desempenho de um canal digital B2B
 
 Diagnóstico de um canal digital de vendas em uma distribuidora farmacêutica:
 quem usa a plataforma, quem está conectado à empresa, quem já compra por ela — e
